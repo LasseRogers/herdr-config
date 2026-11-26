@@ -82,10 +82,10 @@ function icon(p, size, color) {
 const AVATARS = ["duck", "frog", "crab", "robot"];
 const hash = (s) => [...(s ?? "")].reduce((h, c) => (h * 31 + c.codePointAt(0)) >>> 0, 7);
 const avatarPath = (name) => `mods/tc-agents/avatars/${AVATARS.includes(name) ? name : AVATARS[0]}.svg`;
-const MACHINE_COLORS = ["#f7768e", "#9ece6a", "#7aa2f7", "#e0af68", "#bb9af7", "#7dcfff"];
-export const machineColor = (m) => (m ? MACHINE_COLORS[1 + (hash(m) % (MACHINE_COLORS.length - 1))] : MACHINE_COLORS[0]);
-const MARK = { ansi6: "#7dcfff", ansi3: "#ff9e64", ansi4: "#7aa2f7", ansi5: "#bb9af7", ansi2: "#9ece6a", ansi1: "#f7768e" };
-const spaceColor = (id) => { const c = (shared("space.colors") ?? {})[id] ?? "ansi6"; return c.startsWith("#") ? c : MARK[c] ?? "#7dcfff"; };
+// Theme tokens, not hex, so another theme recolors these too.
+const MACHINE_COLORS = ["ansi1", "ansi2", "ansi4", "ansi3", "ansi5", "ansi6"];
+export const machineColor = (m) => theme()[m ? MACHINE_COLORS[1 + (hash(m) % (MACHINE_COLORS.length - 1))] : MACHINE_COLORS[0]];
+const spaceColor = (id) => { const c = (shared("space.colors") ?? {})[id] ?? "ansi6"; return c.startsWith("#") ? c : theme()[c] ?? theme().ansi6; };
 const STATUS_WORD = { working: "WORKING", blocked: "BLOCKED", done: "DONE", idle: "IDLE" };
 
 // Corrupt saved state shouldn't stop the mod from starting.

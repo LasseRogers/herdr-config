@@ -88,13 +88,19 @@ const MARK = { ansi6: "#7dcfff", ansi3: "#ff9e64", ansi4: "#7aa2f7", ansi5: "#bb
 const spaceColor = (id) => { const c = (shared("space.colors") ?? {})[id] ?? "ansi6"; return c.startsWith("#") ? c : MARK[c] ?? "#7dcfff"; };
 const STATUS_WORD = { working: "WORKING", blocked: "BLOCKED", done: "DONE", idle: "IDLE" };
 
+// Corrupt saved state shouldn't stop the mod from starting.
+const load = (key, fallback) => {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch { return fallback; }
+};
+
 export default class Agents extends View {
   init(_props, cx) {
     if (props()?.sortMenu) return;
     this.folded = new Set();
     // Each agent's last state and when it changed (ms), kept across restarts.
-    this.changed = JSON.parse(localStorage.getItem("changed") ?? "{}");
-    this.pendingPins = JSON.parse(localStorage.getItem("pins") ?? "[]");
+    this.changed = load("changed", {});
+    this.pendingPins = load("pins", []);
     if (!this.pendingPins.length) localStorage.removeItem("pins");
     this.migratingPins = new Set();
     cx.timer.every(30000, (cx) => cx.notify());
@@ -141,7 +147,7 @@ export default class Agents extends View {
   // localStorage so a restart doesn't reshuffle them.
   assignAvatars(list, all) {
     if (!this.avatars) {
-      try { this.avatars = JSON.parse(localStorage.getItem("avatars") ?? "{}"); } catch { this.avatars = {}; }
+      this.avatars = load("avatars", {});
     }
     let dirty = false;
     // Forget agents that are gone: not listed and no live terminal. Skipped while

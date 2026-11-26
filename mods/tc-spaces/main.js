@@ -34,13 +34,11 @@ const base = (path) => path.replace(/\/+$/, "").split("/").pop();
 // for this often, in repos the list shows, while the window is in front.
 const FALLBACK = 60000;
 
-// What a stored color name looks like on an avatar (the same in every mod
-// that draws space avatars): one strong color per hue, light and dark alike.
-const MARK = { ansi6: "#7dcfff", ansi3: "#ff9e64", ansi4: "#7aa2f7", ansi5: "#bb9af7", ansi2: "#9ece6a", ansi1: "#f7768e" };
 // Typecraft: each machine gets its own label color (same formula as tc-agents).
-const MACHINE_COLORS = ["#f7768e", "#9ece6a", "#7aa2f7", "#e0af68", "#bb9af7", "#7dcfff"];
+// Theme tokens, not hex, so another theme recolors the labels too.
+const MACHINE_COLORS = ["ansi1", "ansi2", "ansi4", "ansi3", "ansi5", "ansi6"];
 const hashOf = (s) => [...(s ?? "")].reduce((h, c) => (h * 31 + c.codePointAt(0)) >>> 0, 7);
-const machineColor = (m) => (m ? MACHINE_COLORS[1 + (hashOf(m) % (MACHINE_COLORS.length - 1))] : MACHINE_COLORS[0]);
+const machineColor = (m) => theme()[m ? MACHINE_COLORS[1 + (hashOf(m) % (MACHINE_COLORS.length - 1))] : MACHINE_COLORS[0]];
 
 // Corrupt saved state shouldn't stop the mod from starting.
 const load = (key, fallback) => {
@@ -401,7 +399,7 @@ export default class Spaces extends View {
     const fromIndex = this.pressed === null ? -1 : spaces().findIndex(s => s.id === this.pressed);
     const colors = shared("space.colors") ?? {};
     const color = colors[w.id] ?? "ansi6";
-    const fill = color.startsWith("#") ? color : (MARK[color] ?? t[color]);
+    const fill = color.startsWith("#") ? color : t[color];
     return v_flex()
       .relative()
       .id(`space-${w.id}`)
@@ -458,7 +456,7 @@ export default class Spaces extends View {
   tabRows({ w, tree }, t) {
     const colors = shared("space.colors") ?? {};
     const c = colors[w.id] ?? "ansi6";
-    const fill = c.startsWith("#") ? c : (MARK[c] ?? t[c]);
+    const fill = c.startsWith("#") ? c : t[c];
     return (w.tabs ?? []).map((tab) => {
       const on = w.active && tab.active;
       return h_flex().id(`space-tab-${tab.id}`).h(22).flex_none().pl(tree ? 50 : 35).pr(8).gap(6).items_center().rounded(3)

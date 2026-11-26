@@ -11,3 +11,5 @@ for m in mods/tc-*; do ln -sfn $PWD/$m $H/mods/; done
 ```
 
 `tc-agents`, `tc-spaces` and `tc-tabs` are forks of Herdr 0.1.15 built-ins; the `upstream` branch holds the originals, so `git diff upstream main -- mods/` shows what changed.
+
+To pick up a newer Herdr, copy `defaults/mods/{agents,spaces,tabs}` from [herdr-app](https://github.com/herdrdev/herdr-app) at its tag into `mods/tc-*` on `upstream`, commit, then `git merge upstream` on `main`.

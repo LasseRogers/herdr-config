@@ -1,6 +1,6 @@
 # herdr-config
 
-Tokyo Night layout, theme and mods for [Herdr](https://herdr.dev).
+Tokyo Night layout, theme and mods for [Herdr](https://herdr.dev). Uses [JetBrainsMono Nerd Font](https://www.nerdfonts.com/font-downloads).
 
 ```sh
 H=~/.config/herdr-app

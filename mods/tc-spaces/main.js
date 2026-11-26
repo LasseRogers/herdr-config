@@ -42,6 +42,12 @@ const MACHINE_COLORS = ["#f7768e", "#9ece6a", "#7aa2f7", "#e0af68", "#bb9af7", "
 const hashOf = (s) => [...(s ?? "")].reduce((h, c) => (h * 31 + c.codePointAt(0)) >>> 0, 7);
 const machineColor = (m) => (m ? MACHINE_COLORS[1 + (hashOf(m) % (MACHINE_COLORS.length - 1))] : MACHINE_COLORS[0]);
 
+// Corrupt saved state shouldn't stop the mod from starting.
+const load = (key, fallback) => {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch { return fallback; }
+};
+
 // A space speaks up only when something in it needs you.
 export function glyph(status) {
   return status === "blocked" || status === "done" ? "●" : "·";
@@ -68,9 +74,9 @@ export default class Spaces extends View {
     this.pressed = null;
     this.over = null;
     this.machines = [];
-    this.reconnecting = JSON.parse(localStorage.getItem("machines.reconnecting") ?? "{}");
+    this.reconnecting = load("machines.reconnecting", {});
     for (const state of Object.values(this.reconnecting)) state.busy = false;
-    this.folded = new Set(JSON.parse(localStorage.getItem("machines.folded") ?? "[]"));
+    this.folded = new Set(load("machines.folded", []));
     this.refreshMachines(cx);
     cx.timer.every(15000, cx => this.refreshMachines(cx));
     // Refresh only when the refs could have changed (see `due`).

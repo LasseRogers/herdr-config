@@ -11,11 +11,17 @@ function find(node, id) {
   return null;
 }
 
+// Corrupt saved state shouldn't stop the mod from starting.
+const load = (key, fallback) => {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch { return fallback; }
+};
+
 export default class Tabs extends View {
   init() {
     this.pressed = null;
     this.scroll = ScrollHandle.new();
-    this.panels = JSON.parse(localStorage.getItem("panels") ?? "{}");
+    this.panels = load("panels", {});
   }
 
   // The side panel is remembered per space: switching shows that space's choice

@@ -194,8 +194,5 @@
   "theme": "tokyo-night",
   "font": "JetBrainsMono Nerd Font Mono",
   "ui_font": "JetBrainsMono Nerd Font Mono",
-  "font_size": 14,
-  "colors": {
-    "accent": "#7aa2f7"
-  }
+  "font_size": 14
 }

@@ -10,4 +10,4 @@ ln -sfn $PWD/themes/tokyo-night.json $H/themes/
 for m in mods/tc-*; do ln -sfn $PWD/$m $H/mods/; done
 ```
 
-`tc-agents`, `tc-spaces` and `tc-tabs` are forks of Herdr 0.1.15 built-ins and may break on upgrade.
+`tc-agents`, `tc-spaces` and `tc-tabs` are forks of Herdr 0.1.15 built-ins; the `upstream` branch holds the originals, so `git diff upstream main -- mods/` shows what changed.

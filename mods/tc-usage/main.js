@@ -25,7 +25,9 @@ export default class Usage extends View {
     const line = (label, value, color) => h_flex().h(22).items_center().text_size(12)
       .child(div().flex_1().min_w(0).truncate().text_color(t.muted).child(label))
       .child(div().flex_none().font_bold().text_color(color ?? t.foreground).child(String(value)));
-    const bar = (n, total, color) => div().h(6).w_full().bg(t.raised).child(div().h(6).bg(color).w(total ? Math.max(2, (n / total) * 300) : 0).max_w_full());
+    // Grow weights split the track by share, so bars scale with the panel width.
+    const bar = (n, total, color) => h_flex().h(6).w_full().bg(t.raised)
+      .when(n > 0, (el) => el.child(div().h(6).min_w(2).flex_grow(n).bg(color)).child(div().flex_grow(total - n)));
     const tile = (label, value) => v_flex().flex_1().p(8).gap(2).border(1).border_color(t.input).bg(t.popover)
       .child(div().text_size(18).font_bold().text_color(t.accent).child(String(value)))
       .child(div().text_size(10.5).text_color(t.dim).child(label));
